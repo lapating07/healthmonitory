@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Heart Monitor Dashboard</title>
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
+<style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #121212;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    h1 {
+      color: #ff4081;
+      margin-bottom: 30px;
+    }
+
+    .card {
+      background-color: #1e1e1e;
+      padding: 20px 40px;
+      margin: 10px;
+      border-radius: 12px;
+      text-align: center;
+      width: 200px;
+      transition: 0.3s;
+    }
+
+    .value {
+      font-size: 3em;
+      margin: 10px 0;
+    }
+
+    .alert {
+      background-color: #ff4444 !important;
+    }
+</style>
+
+</head>
+<body>
+
+<h1>💓 Heart Monitor Dashboard</h1>
+
+<!-- BPM Card -->
+<div class="card" id="bpmCard">
+    <h2>BPM</h2>
+    <p class="value" id="bpm">0</p>
+</div>
+
+<!-- SpO2 Card -->
+<div class="card" id="spo2Card">
+    <h2>SpO₂</h2>
+    <p class="value" id="spo2">0%</p>
+</div>
+
+<script>
+    // Firebase configuration
+    const firebaseConfig = {
+        apiKey: "AIzaSyCkGLxYWgMS_a4btMQGnltlj8zZ3NnK54s",
+        authDomain: "healthmonitory.firebaseapp.com",
+        databaseURL: "https://healthmonitory-default-rtdb.firebaseio.com",
+        projectId: "healthmonitory",
+        storageBucket: "healthmonitory.appspot.com",
+        messagingSenderId: "166953502026",
+        appId: "1:166953502026:web:19db86e28d3fc428e33248",
+        measurementId: "G-6KHXS0MRGB"
+    };
+
+    // Initialize Firebase
+    const app = firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    // DOM elements
+    const bpmEl = document.getElementById('bpm');
+    const spo2El = document.getElementById('spo2');
+    const bpmCard = document.getElementById('bpmCard');
+    const spo2Card = document.getElementById('spo2Card');
+
+    // Listen for BPM changes
+    db.ref('BPM').on('value', snapshot => {
+        const bpm = snapshot.val();
+        bpmEl.innerText = bpm;
+
+        if (bpm < 60 || bpm > 100) bpmCard.classList.add('alert');
+        else bpmCard.classList.remove('alert');
+    });
+
+    // Listen for SpO2 changes
+    db.ref('SpO2').on('value', snapshot => {
+        const spo2 = snapshot.val();
+        spo2El.innerText = spo2 + "%";
+
+        if (spo2 < 90) spo2Card.classList.add('alert');
+        else spo2Card.classList.remove('alert');
+    });
+</script>
+
+</body>
+</html>
