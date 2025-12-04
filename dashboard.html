@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Heart Dashboard</title>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+</head>
+<body>
+  <h1>Heart Monitor</h1>
+  <p>BPM: <span id="bpm">0</span></p>
+  <p>SpO2: <span id="spo2">0</span>%</p>
+
+  <script>
+   const firebaseConfig = {
+  apiKey: "AIzaSyCkGLxYWgMS_a4btMQGnltlj8zZ3NnK54s",
+  authDomain: "healthmonitory.firebaseapp.com",
+  databaseURL: "https://healthmonitory-default-rtdb.firebaseio.com",
+  projectId: "healthmonitory",
+  storageBucket: "healthmonitory.firebasestorage.app",
+  messagingSenderId: "186221573540",
+  appId: "1:186221573540:web:6c8a462d9e5232a8ad7d31",
+  measurementId: "G-6KHXS0MRGB"
+};
+
+    const app = firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    db.ref('BPM').on('value', snap => {
+      document.getElementById('bpm').innerText = snap.val();
+    });
+
+    db.ref('SpO2').on('value', snap => {
+      document.getElementById('spo2').innerText = snap.val();
+    });
+  </script>
+</body>
+</html>
